@@ -13,6 +13,7 @@ class CameraViewController: UIViewController {
     
     lazy private var captureSession = AVCaptureSession()
     lazy private var fileOutput = AVCaptureMovieFileOutput()
+    var player: AVPlayer!
 
     @IBOutlet var recordButton: UIButton!
     @IBOutlet var cameraView: CameraPreviewView!
@@ -21,9 +22,30 @@ class CameraViewController: UIViewController {
 	override func viewDidLoad() {
 		super.viewDidLoad()
         setUpCamera()
+        
 		// Resize camera preview to fill the entire screen
 		cameraView.videoPlayerView.videoGravity = .resizeAspectFill
+        
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTapGesture(_:)))
+        view.addGestureRecognizer(tapGesture)
 	}
+    
+    @objc func handleTapGesture(_ tapGesture: UITapGestureRecognizer) {
+        print("tap")
+        switch(tapGesture.state) {
+        case .ended:
+            playRecording()
+        default:
+            print("handled other states: \(tapGesture.state)")
+        }
+    }
+    
+    func playRecording() {
+        if let player = player {
+            player.seek(to: CMTime.zero)
+            player.play()
+        }
+    }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
@@ -53,6 +75,15 @@ class CameraViewController: UIViewController {
             captureSession.sessionPreset = .hd1920x1080
         }
         
+        let microphone = bestAudio()
+        guard let audioInput = try? AVCaptureDeviceInput(device: microphone) else {
+            fatalError("Can't create input from microphone")
+        }
+        
+        guard captureSession.canAddInput(audioInput) else {
+            fatalError("Can't add audio input")
+        }
+        captureSession.addInput(audioInput)
         
         guard captureSession.canAddOutput(fileOutput) else {
             fatalError("Cannot record to disk")
@@ -76,6 +107,12 @@ class CameraViewController: UIViewController {
         fatalError("No cameras on the device (or running it on the iPhone simulator)")
     }
 
+    private func bestAudio() -> AVCaptureDevice {
+        if let device = AVCaptureDevice.default(for: .audio) {
+            return device
+        }
+        fatalError("No audio")
+    }
 
     @IBAction func recordButtonPressed(_ sender: Any) {
         toggleRecord()
@@ -104,6 +141,21 @@ class CameraViewController: UIViewController {
     private func updateViews() {
         recordButton.isSelected = fileOutput.isRecording
     }
+    
+    func playMovie(url: URL) {
+        player = AVPlayer(url: url)
+        let playerLayer = AVPlayerLayer(player: player)
+        var topRect = self.view.bounds
+        topRect.size.height = topRect.height / 4
+        topRect.size.width = topRect.width / 4
+        topRect.origin.y = view.layoutMargins.top
+        
+        playerLayer.frame = topRect
+        self.view.layer.addSublayer(playerLayer)
+        
+        player.play()
+    }
+    
 }
 
 extension CameraViewController: AVCaptureFileOutputRecordingDelegate {
@@ -118,6 +170,8 @@ extension CameraViewController: AVCaptureFileOutputRecordingDelegate {
         }
         print("Video: \(outputFileURL.path)")
         updateViews()
+        
+        playMovie(url: outputFileURL)
     }
     
 }
