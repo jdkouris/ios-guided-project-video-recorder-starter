@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		29C013E623D7F18C00F552FC /* PlaybackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29C013E523D7F18C00F552FC /* PlaybackView.swift */; };
 		BD891F2A234504D00035EB8C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD891F29234504D00035EB8C /* AppDelegate.swift */; };
 		BD891F2C234504D00035EB8C /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD891F2B234504D00035EB8C /* SceneDelegate.swift */; };
 		BD891F2E234504D00035EB8C /* CameraViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD891F2D234504D00035EB8C /* CameraViewController.swift */; };
@@ -18,6 +19,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		29C013E523D7F18C00F552FC /* PlaybackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaybackView.swift; sourceTree = "<group>"; };
 		BD891F26234504D00035EB8C /* VideoRecorder.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VideoRecorder.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		BD891F29234504D00035EB8C /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		BD891F2B234504D00035EB8C /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -64,6 +66,7 @@
 				BD891F2B234504D00035EB8C /* SceneDelegate.swift */,
 				BD891F2D234504D00035EB8C /* CameraViewController.swift */,
 				BD891F3D2345055E0035EB8C /* CameraPreviewView.swift */,
+				29C013E523D7F18C00F552FC /* PlaybackView.swift */,
 				BD891F41234505DB0035EB8C /* ViewController.swift */,
 				BD891F3F234505930035EB8C /* Main.storyboard */,
 				BD891F32234504D20035EB8C /* Assets.xcassets */,
@@ -145,6 +148,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				BD891F42234505DB0035EB8C /* ViewController.swift in Sources */,
+				29C013E623D7F18C00F552FC /* PlaybackView.swift in Sources */,
 				BD891F3E2345055E0035EB8C /* CameraPreviewView.swift in Sources */,
 				BD891F2E234504D00035EB8C /* CameraViewController.swift in Sources */,
 				BD891F2A234504D00035EB8C /* AppDelegate.swift in Sources */,

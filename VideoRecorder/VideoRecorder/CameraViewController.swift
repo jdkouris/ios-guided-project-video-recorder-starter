@@ -14,6 +14,7 @@ class CameraViewController: UIViewController {
     lazy private var captureSession = AVCaptureSession()
     lazy private var fileOutput = AVCaptureMovieFileOutput()
     var player: AVPlayer!
+    var playerView: PlaybackView!
 
     @IBOutlet var recordButton: UIButton!
     @IBOutlet var cameraView: CameraPreviewView!
@@ -143,16 +144,35 @@ class CameraViewController: UIViewController {
     }
     
     func playMovie(url: URL) {
+        if playerView == nil {
+            playerView = PlaybackView()
+            
+            var topRect = self.view.bounds
+            topRect.size.height = topRect.height / 4
+            topRect.size.width = topRect.width / 4
+            topRect.origin.y = view.layoutMargins.top
+            
+            playerView.frame = topRect
+            view.addSubview(playerView)
+        }
+        
+        /*
+         Assumption: player is non-nil (because it is an explicitely unwrapped optional)
+         
+         player?.pause():
+            We aren't sure if player exists or not - if this is the first time we run this part, then it won't!
+            To prevent it from crashing if it is nil, we swap our assumptions around and place a '?' to make it a regular optional, which won't do anything if it is nil
+         
+         player = AVPlayer(url: url):
+            We are creating a new player right here.
+            From this point forward, it will always be non-nil
+         
+         player.play():
+            Because it is explicitely unwrapped, and we know it is not nil, it's safe to use without a '?'
+         */
+        player?.pause()
         player = AVPlayer(url: url)
-        let playerLayer = AVPlayerLayer(player: player)
-        var topRect = self.view.bounds
-        topRect.size.height = topRect.height / 4
-        topRect.size.width = topRect.width / 4
-        topRect.origin.y = view.layoutMargins.top
-        
-        playerLayer.frame = topRect
-        self.view.layer.addSublayer(playerLayer)
-        
+        playerView.playerLayer.player = player
         player.play()
     }
     
